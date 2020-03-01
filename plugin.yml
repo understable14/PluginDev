@@ -1,0 +1,35 @@
+name: HelpCommand
+main: com.gmail.understable02.HelpCommand.HelpCommand
+version: 1.0
+author: understable
+commands:
+  hcommands:
+    description: Main command
+    usage: /help
+    permission: helpcommand.use
+    permission-message: You dont have permission for that
+  hreload:
+    description: Reload command
+    usage: /reload HelpCommand
+    permission: helpcommand.reload
+    permission-message: You dont have permission for that  
+  test:
+    description: Announce command
+    usage: /test
+    permission: helpcommand.announce
+    permission-message: You dont have permission for that  
+    
+permissions:
+  helpcommand.use:
+   description: Allows using the help command
+   default: true
+  helpcommand.reload:
+   description: Allows helpcommands config reload
+   default: op
+  helpcommmand.*:
+   description: Allows all helpcommand's permissions
+   default: op
+   children:
+     helpcommand.reload: true
+     
+        
