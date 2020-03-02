@@ -9,6 +9,6 @@ public class AnnounceSchedule extends TimerTask {
 
 	public void run() 
 	{
-		Bukkit.broadcastMessage("announced");
+		Bukkit.broadcastMessage("anounced");
 	}
 }
