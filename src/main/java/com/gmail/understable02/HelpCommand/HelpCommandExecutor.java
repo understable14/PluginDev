@@ -4,6 +4,7 @@ package com.gmail.understable02.HelpCommand;
 
 
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,12 +17,16 @@ import org.bukkit.command.CommandSender;
 
 public class HelpCommandExecutor implements CommandExecutor {
 	private final HelpCommand plugin;
+	boolean TimerRunning = false;
+	Timer timer;
 	
 	
-	public HelpCommandExecutor(HelpCommand plugin) {
+	HelpCommandExecutor(HelpCommand plugin) 
+	{
 		this.plugin = plugin;
-		
 	}
+
+
 
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -41,11 +46,32 @@ public class HelpCommandExecutor implements CommandExecutor {
 		{
 			if(sender.hasPermission("helpcommand.reload")) 
 			{
+			if (!TimerRunning) {plugin.timer.cancel();}
 			plugin.reloadConfig();
 			plugin.config = plugin.getConfig();
 			help = plugin.getConfig().getStringList("message"); 
-			sender.sendMessage("reloaded");
 			
+			
+			final TimerTask repeatedTask = new TimerTask() 
+			
+			{
+				java.util.List<String> announcer = plugin.config.getStringList("announcer");
+				public void run() 
+				{
+					Random rand = new Random();
+					int StringIndex = rand.nextInt(announcer.size());
+					String msg = announcer.get(StringIndex);					
+					Bukkit.broadcastMessage(msg);
+															
+				}
+			};
+			
+			long delay = plugin.config.getLong("timer") * 1000;
+			if(TimerRunning) {timer.cancel();}
+			timer = new Timer();
+			timer.schedule(repeatedTask, delay, delay);
+			TimerRunning = true;
+			sender.sendMessage("reloaded");
 			}
 			return true;
 		}
